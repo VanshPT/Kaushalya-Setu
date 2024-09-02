@@ -22,14 +22,23 @@
         }
         .custom-flex{
             flex-direction:column;
+            justify-content:center!important;
+            align-items:center;
+            margin-left:2rem;
         }
         .head1{
             font-size:1.5rem;
         }
-        .custom-flex{
-            flex-direction: column;
-            justify-content:center;
-            align-items:center;
+        
+        #prompt{
+            border:2px solid grey;
+            border-radius:5px;
+        }
+        #submit-button{
+            background-color:blue;
+            padding:10px;
+            border-radius:5px;
+            color:white;
         }
     </style>
 </head>
@@ -159,14 +168,17 @@
 
     <!-- Main content area -->
     <main>
-        <div class="custom-flex">
+    <div class="custom-flex">
         <h1 class="head1">Generate Roadmap</h1>
         <div class="mt-6 flex max-w-md gap-x-4">
-            <label for="email-address" class="sr-only">Email address</label>
-            <input id="email-address" name="email" type="email" autocomplete="email" required="" class="min-w-0 flex-auto rounded-md border-0 bg-white/5 px-10 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" placeholder="Enter your Prompt">
-            <button type="submit" class="flex-none rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Subscribe</button>
-          </div>
+            <form method="post" action="">
+                {% csrf_token %}  
+                <label for="prompt">Enter your prompt:</label>
+                <textarea id="prompt" name="prompt" rows="3" cols="100"></textarea>
+                <button type="submit" id="submit-button">Process Prompt</button>
+            </form>
         </div>
+    </div>
     </main>
 
     <!-- JavaScript for dropdown menu functionality -->
@@ -191,7 +203,26 @@
                 }
             });
         });
+        {% comment %} function processPrompt() {
+            const prompt = document.getElementById("prompt").value;
+            if (prompt) {
+                fetch("{% url 'process_prompt' %}", {
+                    method: "POST",
+                    body: JSON.stringify({ prompt: prompt }),
+                    headers: { "Content-Type": "application/json" },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("response").textContent = data.response;
+                })
+                .catch(error => {
+                    console.error(error);   
+        
+                });
+            }
+        } {% endcomment %}
     </script>
 </body>
+
 
 </html>
