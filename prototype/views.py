@@ -65,4 +65,24 @@ class SaveEmitPromptView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class GetRoadmapView(APIView):
+    def get(self, request, pk):
+        try:
+            roadmap = PrevRoadmap.objects.get(pk=pk)
+            serializer = serializers.RoadmapSerializer(roadmap)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except PrevRoadmap.DoesNotExist:
+            return Response({'error': 'Roadmap not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self, request, pk):
+        try:
+            roadmap = PrevRoadmap.objects.get(pk=pk)
+            roadmap.delete()
+            return Response({'message': 'Roadmap deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+        except PrevRoadmap.DoesNotExist:
+            return Response({'error': 'Roadmap not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            # Handle other potential exceptions (e.g., database errors)
+            return Response({'error': f'An error occurred: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
