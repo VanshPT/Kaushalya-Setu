@@ -5,10 +5,12 @@ from rest_framework import status
 from . import serializers  # Import your serializer (explained in step 4)
 import google.generativeai as genai
 import os
+from .models import PrevRoadmap
 from django.conf import settings
 # Create your views here.
 def roadmap(request):
-    return render(request,'prototype/roadmap.html')
+    prev_roadmaps=PrevRoadmap.objects.all()
+    return render(request,'prototype/roadmap.html', context={"prev_roadmaps":prev_roadmaps})
 
 
 
@@ -50,4 +52,17 @@ class ProcessPromptView(APIView):
             return Response({'response': response.text}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
+        
+class SaveEmitPromptView(APIView):
+    def get(self, request):
+        roadmaps = PrevRoadmap.objects.all()
+        serializer = serializers.RoadmapSerializer(roadmaps, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        serializer = serializers.RoadmapSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

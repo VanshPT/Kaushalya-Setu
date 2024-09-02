@@ -51,6 +51,13 @@
       margin-top: 1rem;
       font-family: monospace; /* Display response in mono-spaced font */
     }
+    .prev-roadmap-section{
+        margin-left:2rem;
+        margin-top:2rem;
+    }
+    .link-col{
+        color:blue;
+    }
   </style>
 </head>
 
@@ -63,7 +70,7 @@
     <div class="custom-flex">
       <h1 class="head1">Generate Roadmap</h1>
       <div class="mt-6 flex max-w-md gap-x-4">
-        <form id="prompt-form">
+        <form id="prompt-form">{% csrf_token %}
           <label for="prompt">Enter your prompt:</label>
           <textarea id="prompt" name="prompt" rows="3" cols="100"></textarea>
           <button type="submit" id="submit-button">Process Prompt</button>
@@ -74,6 +81,14 @@
   </main>
   <main>
     <pre id="response"></pre>
+  </main>
+  <main class="prev-roadmap-section">
+    <h2 class="head1">Previously Explored Roadmaps</h2>
+    <ul>
+        {% for roadmap in prev_roadmaps %}
+        <li><a href="#" class="link-col">{{ roadmap.prompt }}</a></li>
+        {% endfor %}
+    </ul>
   </main>
 
   <script>
@@ -100,38 +115,68 @@
   </script>
   <script>
     const form = document.getElementById('prompt-form');
-    const responseEl = document.getElementById('response');
+const responseEl = document.getElementById('response');
 
-    form.addEventListener('submit', (event) => {
-      event.preventDefault(); // Prevent default form submission
+form.addEventListener('submit', (event) => {
+  event.preventDefault(); // Prevent default form submission
 
-      const prompt = document.getElementById('prompt').value;
+  const prompt = document.getElementById('prompt').value;
 
-      if (!prompt) {
-        alert('Please enter a prompt!');
-        return;
-      }
+  if (!prompt) {
+    alert('Please enter a prompt!');
+    return;
+  }
 
-      const requestData = {
+  const requestData = {
+    prompt: prompt,
+    // Add any other required fields here
+  };
+
+  fetch("http://127.0.0.1:8000/process_prompt/", { // Replace with your API endpoint URL
+    method: "POST",
+    body: JSON.stringify(requestData),
+    headers: { "Content-Type": "application/json" },
+  })
+    .then(response => response.json())
+    .then(data => {
+      responseEl.textContent = JSON.stringify(data, null, 2); // Pretty-print JSON
+
+      // Prepare data for save_prompt API
+      const saveData = {
         prompt: prompt,
-        // Add any other required fields here
+        response: JSON.stringify(data), // Convert response object to a string
       };
 
-      fetch("http://127.0.0.1:8000/process_prompt/", { // Replace with your API endpoint URL
+      // Send the data to the save_prompt API
+      fetch("http://127.0.0.1:8000/save_prompt/", { // Replace with your save_prompt endpoint URL
         method: "POST",
-        body: JSON.stringify(requestData),
+        body: JSON.stringify(saveData),
         headers: { "Content-Type": "application/json" },
       })
-        .then(response => response.json())
-        .then(data => {
-          responseEl.textContent = JSON.stringify(data, null, 2); // Pretty-print JSON
+        .then(saveResponse => saveResponse.json())
+        .then(saveResult => {
+          console.log("Save result:", saveResult);
+          // You can display a success message here based on the saveResult
         })
-        .catch(error => {
-          console.error('Error:', error);
-          responseEl.textContent = 'Error processing prompt.';
+        .catch(saveError => {
+          console.error("Error saving data:", saveError);
+          // You can display an error message here
         });
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      responseEl.textContent = 'Error processing prompt.';
     });
+});
   </script>
+  <script>
+    const saveData={
+        prompt:prompt,
+        response:responseEl.textContent
+    }
+    console.log(saveData)
+  </script>
+
 </body>
 
 </html>
