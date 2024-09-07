@@ -3,41 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roadmap</title>
+    <title>React Developer Roadmap</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <style>
-        /* Additional custom styling can be added here if needed */
-    </style>
 </head>
-<body class="bg-gray-100 text-gray-900">
+<body class="bg-gray-100 min-h-screen">
 
-    <!-- Container for the roadmap -->
-    <div class="max-w-5xl mx-auto p-8">
-        <!-- Title, Description, and Total Time -->
-        <div id="roadmap-header" class="mb-8">
-            <h1 class="text-4xl font-bold mb-2" id="roadmap-title"></h1>
-            <p class="text-lg mb-4" id="roadmap-description"></p>
-            <p class="text-sm font-semibold text-gray-600" id="roadmap-total-time"></p>
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <!-- Logo -->
+                    <img src="images/Logo_maker_project-removebg-preview.png" alt="Logo" class="h-10 w-10 mr-2" />
+                    <span class="font-bold text-xl">kaushalya setu</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#" class="font-semibold text-gray-700 hover:text-blue-500">Roadmap</a>
+                    <a href="#" class="font-semibold text-gray-700 hover:text-blue-500">Quiz</a>
+                    <a href="#" class="font-semibold text-gray-700 hover:text-blue-500">Trends</a>
+                    <a href="#" class="font-semibold text-gray-700 hover:text-blue-500">About</a>
+                </div>
+                <div>
+                    <a href="#" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Login</a>
+                </div>
+            </div>
         </div>
+    </nav>
 
-        <!-- Tree structure for the roadmap phases -->
-        <div id="roadmap-tree" class="space-y-4">
-            <!-- Dynamically generated roadmap tree goes here -->
-        </div>
+    <!-- Roadmap Content -->
+    <div class="container mx-auto p-6">
+        <h1 id="title" class="text-3xl font-bold mb-4"></h1>
+        <p id="description" class="text-gray-600 mb-6"></p>
+        <p id="totalTime" class="text-gray-800 mb-10 font-semibold"></p>
+
+        <ol id="roadmap" class="relative border-l border-gray-200 dark:border-gray-700">
+            <!-- Dynamic content will be injected here -->
+        </ol>
     </div>
 
-    <!-- Modal for displaying skill details -->
-    <div id="skill-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center">
-        <div class="bg-white p-8 rounded-lg max-w-lg w-full shadow-xl">
-            <h2 class="text-2xl font-bold mb-4" id="skill-modal-title"></h2>
-            <ul id="skill-modal-content" class="list-disc list-inside text-gray-700"></ul>
-            <button id="close-modal" class="mt-6 bg-red-500 text-white px-4 py-2 rounded">Close</button>
+    <!-- Modal -->
+    <div id="learnMoreModal" class="fixed inset-0 hidden items-center justify-center bg-gray-800 bg-opacity-75">
+        <div class="bg-white rounded-lg p-8 max-w-4xl mx-auto mt-20">
+            <div class="flex justify-between items-center">
+                <h2 class="text-xl font-bold" id="modalTitle"></h2>
+                <button id="closeModal" class="text-gray-500 hover:text-gray-800">&times;</button>
+            </div>
+            <div id="modalContent" class="bg-gray-100 p-4 rounded-lg mt-4 h-48 overflow-y-auto">
+                <!-- Dynamic content will be injected here -->
+            </div>
         </div>
     </div>
 
     <script>
-        // Sample input JSON (this will be dynamic)
-        const inputJson = {
+        const roadmapData = {
             "title": "React Developer Roadmap",
             "description": "This roadmap outlines the skills and technologies necessary to become a proficient React developer, covering everything from the basics to advanced concepts and popular libraries within the React ecosystem.",
             "totalTime": "6-12+ Months",
@@ -47,12 +65,22 @@
                     "skills": [
                         {
                             "name": "HTML, CSS, and JavaScript",
-                            "description": "Master the core languages of the web.",
+                            "description": "Master the core languages of the web. Understand semantic HTML for structure, CSS for styling, and JavaScript for interactivity.",
                             "time": "1-2 Months"
                         },
                         {
                             "name": "DOM Manipulation",
-                            "description": "Learn how to interact with the DOM.",
+                            "description": "Learn how to interact with and manipulate the Document Object Model (DOM) using JavaScript to create dynamic content and updates.",
+                            "time": "2 Weeks"
+                        },
+                        {
+                            "name": "Fetch API/AJAX",
+                            "description": "Understand how to make asynchronous requests to servers from your web pages to load and update data without full page reloads.",
+                            "time": "1 Week"
+                        },
+                        {
+                            "name": "Version Control (Git & GitHub)",
+                            "description": "Learn Git for version control to track changes in your code, collaborate on projects, and manage different versions of your projects.",
                             "time": "2 Weeks"
                         }
                     ]
@@ -62,69 +90,161 @@
                     "skills": [
                         {
                             "name": "Modern JavaScript (ES6+)",
-                            "description": "Get comfortable with modern JS features.",
+                            "description": "Get comfortable with modern JavaScript features like arrow functions, template literals, destructuring, spread syntax, classes, and modules.",
+                            "time": "3-4 Weeks"
+                        },
+                        {
+                            "name": "Data Structures & Algorithms",
+                            "description": "Learn common data structures (arrays, objects, maps, sets) and algorithms (searching, sorting) to write efficient JavaScript code.",
                             "time": "3-4 Weeks"
                         },
                         {
                             "name": "Asynchronous JavaScript",
-                            "description": "Master Promises and async/await.",
+                            "description": "Master concepts like Promises, async/await, and how to handle asynchronous operations (like fetching data) effectively in JavaScript.",
                             "time": "2-3 Weeks"
+                        },
+                        {
+                            "name": "Package Managers: npm or yarn",
+                            "description": "Learn to use a package manager like npm or yarn to install, manage, and update JavaScript libraries and dependencies in your projects.",
+                            "time": "1 Week"
+                        }
+                    ]
+                },
+                {
+                    "name": "Learning React (3-4 Months)",
+                    "skills": [
+                        {
+                            "name": "React Basics",
+                            "description": "Understand the core concepts of React, including components, JSX, props, state, lifecycle methods, and hooks (useState, useEffect).",
+                            "time": "4-6 Weeks"
+                        },
+                        {
+                            "name": "React Router",
+                            "description": "Learn to implement navigation and routing in your React applications using React Router, allowing for different views and URLs.",
+                            "time": "2 Weeks"
+                        },
+                        {
+                            "name": "State Management",
+                            "description": "Start with React's built-in state management (useState, useContext) and then explore external libraries like Redux, Zustand, or Recoil for managing complex application state.",
+                            "time": "3-4 Weeks"
+                        },
+                        {
+                            "name": "Styling in React",
+                            "description": "Explore different ways to style your React components, including inline styles, CSS Modules, styled-components, and CSS-in-JS libraries.",
+                            "time": "2 Weeks"
+                        },
+                        {
+                            "name": "Fetching Data",
+                            "description": "Practice fetching data from APIs in your React applications. Use tools like Axios or the built-in Fetch API.",
+                            "time": "2 Weeks"
+                        },
+                        {
+                            "name": "Testing",
+                            "description": "Learn to write tests for your React components and logic using testing libraries like Jest and React Testing Library.",
+                            "time": "2 Weeks"
+                        }
+                    ]
+                },
+                {
+                    "name": "Building Real-World Projects",
+                    "skills": [
+                        {
+                            "name": "Personal Projects",
+                            "description": "Build several personal projects to solidify your React knowledge. Ideas include a to-do list app, a weather app, a movie database browser, or an e-commerce storefront.",
+                            "time": "Ongoing"
+                        },
+                        {
+                            "name": "Contributing to Open Source",
+                            "description": "Consider contributing to open-source React projects to gain experience, collaborate with other developers, and give back to the community.",
+                            "time": "Ongoing"
+                        }
+                    ]
+                },
+                {
+                    "name": "Advanced React & Ecosystem (Ongoing)",
+                    "skills": [
+                        {
+                            "name": "Performance Optimization",
+                            "description": "Learn techniques to optimize React application performance, such as memoization, code splitting, and virtualized lists.",
+                            "time": "2-3 Weeks"
+                        },
+                        {
+                            "name": "Server-Side Rendering (SSR)",
+                            "description": "Explore frameworks like Next.js or Gatsby, which provide server-side rendering capabilities for improved SEO and initial load times.",
+                            "time": "3-4 Weeks"
+                        },
+                        {
+                            "name": "TypeScript with React",
+                            "description": "Consider learning TypeScript, a statically typed superset of JavaScript, to improve code quality and maintainability in larger React projects.",
+                            "time": "3-4 Weeks"
+                        },
+                        {
+                            "name": "Stay Updated",
+                            "description": "The React ecosystem evolves rapidly. Keep learning new libraries, hooks, and patterns by following blogs, attending conferences, and reading documentation.",
+                            "time": "Ongoing"
                         }
                     ]
                 }
             ]
         };
+    
+        // Function to generate roadmap items
+        function generateRoadmap(data) {
+            document.getElementById('title').textContent = data.title;
+            document.getElementById('description').textContent = data.description;
+            document.getElementById('totalTime').textContent = `Total Time: ${data.totalTime}`;
 
-        // Function to render the roadmap on the webpage
-        function renderRoadmap(data) {
-            // Fill the title, description, and total time
-            document.getElementById('roadmap-title').textContent = data.title;
-            document.getElementById('roadmap-description').textContent = data.description;
-            document.getElementById('roadmap-total-time').textContent = `Total Time: ${data.totalTime}`;
+            const roadmap = document.getElementById('roadmap');
+            data.roadmap.forEach((item, index) => {
+                const listItem = document.createElement('li');
+                listItem.classList.add('mb-10', 'ml-4');
 
-            const roadmapTree = document.getElementById('roadmap-tree');
-            roadmapTree.innerHTML = '';
+                const marker = document.createElement('div');
+                marker.classList.add('absolute', 'w-3', 'h-3', 'bg-gray-200', 'rounded-full', 'mt-1.5', '-left-1.5', 'border', 'border-white', 'dark:border-gray-900', 'dark:bg-gray-700');
+                listItem.appendChild(marker);
 
-            // Generate tree structure
-            data.roadmap.forEach((phase, index) => {
-                const phaseNode = document.createElement('div');
-                phaseNode.classList.add('border-l-4', 'pl-4', 'cursor-pointer', 'bg-white', 'p-4', 'rounded-md', 'shadow-md');
-                
-                phaseNode.innerHTML = `<h3 class="text-xl font-semibold">${phase.name}</h3>`;
+                const title = document.createElement('h3');
+                title.classList.add('text-lg', 'font-semibold', 'text-gray-900', 'dark:text-white');
+                title.textContent = item.name;
+                listItem.appendChild(title);
 
-                // Add click event to open modal with skills
-                phaseNode.addEventListener('click', () => openModal(phase.name, phase.skills));
-                roadmapTree.appendChild(phaseNode);
+                const link = document.createElement('a');
+                link.href = "#";
+                link.classList.add('learn-more', 'inline-flex', 'items-center', 'px-4', 'py-2', 'text-sm', 'font-medium', 'text-gray-900', 'bg-white', 'border', 'border-gray-200', 'rounded-lg', 'hover:bg-gray-100', 'hover:text-blue-700');
+                link.dataset.index = index;
+                link.innerHTML = `Learn more <svg class="w-3 h-3 ml-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/></svg>`;
+                listItem.appendChild(link);
+
+                roadmap.appendChild(listItem);
+            });
+
+            document.querySelectorAll('.learn-more').forEach(button => {
+                button.addEventListener('click', event => {
+                    event.preventDefault();
+                    const index = event.currentTarget.dataset.index;
+                    openModal(data.roadmap[index]);
+                });
             });
         }
 
-        // Function to open modal with skill details
-        function openModal(phaseName, skills) {
-            const modal = document.getElementById('skill-modal');
-            const skillModalTitle = document.getElementById('skill-modal-title');
-            const skillModalContent = document.getElementById('skill-modal-content');
-
-            skillModalTitle.textContent = phaseName;
-            skillModalContent.innerHTML = '';
-
-            // Display skill details
-            skills.forEach(skill => {
-                const skillItem = document.createElement('li');
-                skillItem.innerHTML = `<strong>${skill.name}</strong>: ${skill.description} <span class="text-gray-500">(${skill.time})</span>`;
-                skillModalContent.appendChild(skillItem);
-            });
-
-            // Show modal
-            modal.classList.remove('hidden');
+        // Function to open modal with specific item data
+        function openModal(item) {
+            document.getElementById('modalTitle').textContent = item.name;
+            const skills = item.skills.map(skill => `<p><strong>${skill.name}:</strong> ${skill.description} (Time: ${skill.time})</p>`).join('');
+            document.getElementById('modalContent').innerHTML = skills;
+            document.getElementById('learnMoreModal').classList.remove('hidden');
         }
 
-        // Close modal
-        document.getElementById('close-modal').addEventListener('click', () => {
-            document.getElementById('skill-modal').classList.add('hidden');
+        // Close modal functionality
+        document.getElementById('closeModal').addEventListener('click', () => {
+            document.getElementById('learnMoreModal').classList.add('hidden');
         });
 
-        // Render roadmap on page load
-        renderRoadmap(inputJson);
+        // Generate roadmap on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            generateRoadmap(roadmapData);
+        });
     </script>
+
 </body>
 </html>
