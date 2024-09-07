@@ -86,10 +86,6 @@ class GetRoadmapView(APIView):
             # Handle other potential exceptions (e.g., database errors)
             return Response({'error': f'An error occurred: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
-def gen_nodes(request):
-    return render(request,'prototype/gen_nodes.html')
-
 def main_roadmap(request):
     return render(request,'prototype/main_roadmap.html')
 
