@@ -1,282 +1,364 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Roadmap generation page</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <style>
+      /* Additional custom styles */
+      .hidden {
+        display: none;
+      }
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Tailwind CSS Starter</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <style>
-    /* Additional custom styles */
-    .hidden {
-      display: none;
-    }
+      #user-logo {
+        background-color: white;
+        padding: 7px;
+        border-radius: 80px;
+      }
 
-    #user-logo {
-      background-color: white;
-      padding: 7px;
-      border-radius: 80px;
-    }
+      .custom-flex {
+        flex-direction: column;
+        justify-content: center !important;
+        align-items: center;
+        margin-left: 2rem;
+      }
 
-    .custom-flex {
-      flex-direction: column;
-      justify-content: center!important;
-      align-items: center;
-      margin-left: 2rem;
-    }
+      .head1 {
+        font-size: 1.5rem;
+      }
 
-    .head1 {
-      font-size: 1.5rem;
-    }
+      #prompt {
+        border: 2px solid grey;
+        border-radius: 5px;
+      }
 
-    #prompt {
-      border: 2px solid grey;
-      border-radius: 5px;
-    }
+      #submit-button {
+        background-color: blue;
+        padding: 10px;
+        border-radius: 5px;
+        color: white;
+      }
 
-    #submit-button {
-      background-color: blue;
-      padding: 10px;
-      border-radius: 5px;
-      color: white;
-    }
+      #response {
+        border: 1px solid lightgrey;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 1rem;
+        font-family: monospace; /* Display response in mono-spaced font */
+      }
+      .prev-roadmap-section {
+        margin-left: 2rem;
+        margin-top: 2rem;
+      }
+      .link-col {
+        color: blue;
+      }
+      .icon-modify {
+        margin-left: 0.5rem;
+      }
+      .delete-question {
+        font-weight: bold;
+        font-size: 1rem;
+      }
+    </style>
+  </head>
 
-    #response {
-      border: 1px solid lightgrey;
-      padding: 10px;
-      border-radius: 5px;
-      margin-top: 1rem;
-      font-family: monospace; /* Display response in mono-spaced font */
-    }
-    .prev-roadmap-section{
-        margin-left:2rem;
-        margin-top:2rem;
-    }
-    .link-col{
-        color:blue;
-    }
-    .icon-modify{
-        margin-left:0.5rem;
-    }
-    .delete-question{
-        font-weight:bold;
-        font-size:1rem;
-    }
-  </style>
-</head>
+  <body>
+    <header class="bg-yellow-300">{% include 'prototype/navbar.html' %}</header>
 
-<body>
-  <header class="bg-yellow-300">
-    {% include 'prototype/navbar.html' %}
-  </header>
-
-  <main>
-    <div class="custom-flex">
-      <h1 class="head1">Generate Roadmap</h1>
-      <div class="mt-6 flex max-w-md gap-x-4">
-        <form id="prompt-form">{% csrf_token %}
-          <label for="prompt">Enter your prompt:</label>
-          <textarea id="prompt" name="prompt" rows="3" cols="100"></textarea>
-          <button type="submit" id="submit-button">Process Prompt</button>
-        </form>
-        
+    <main>
+      <div class="custom-flex">
+        <h1 class="head1 font-bold font-awesome animate-slide-in">
+          Generate Roadmap
+        </h1>
+        <div class="mt-6 flex max-w-md gap-x-4">
+          <form id="prompt-form">
+            {% csrf_token %}
+            <label for="prompt">Enter your prompt:</label>
+            <textarea id="prompt" name="prompt" rows="3" cols="100"></textarea>
+            <button type="submit" id="submit-button">Process Prompt</button>
+          </form>
+        </div>
       </div>
-    </div>
-  </main>
-  <main>
-    <pre id="response"></pre>
-  </main>
-  <main class="prev-roadmap-section">
-    <h2 class="head1">Previously Explored Roadmaps</h2>
-    <ul>
+    </main>
+
+    // Display the response from the API
+    <main>
+      <pre id="response"></pre>
+    </main>
+
+    <main class="prev-roadmap-section">
+      <h2 class="head1">Previously Explored Roadmaps</h2>
+      <ul>
         {% for roadmap in prev_roadmaps %}
-        <li><a href="#" class="link-col prev-roadmap-link" data-id="{{ roadmap.id }}"><span>{{ roadmap.id }}</span> - {{ roadmap.prompt }}</a><span class="icon-modify"><button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal-{{ roadmap.id }}">
-            <i class="fa-solid fa-trash"></i>
-          </button></span></li>
-          <!-- Modal -->
-<div class="modal fade" id="exampleModal-{{ roadmap.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel" class="head1">Delete this Roadmap?</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <li>
+          <a
+            href="#"
+            class="link-col prev-roadmap-link"
+            data-id="{{ roadmap.id }}"
+            ><span>{{ roadmap.id }}</span> - {{ roadmap.prompt }}</a
+          ><span class="icon-modify"
+            ><button
+              type="button"
+              class="btn"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal-{{ roadmap.id }}"
+            >
+              <i class="fa-solid fa-trash"></i></button
+          ></span>
+        </li>
+        <!-- Modal -->
+        <div
+          class="modal fade"
+          id="exampleModal-{{ roadmap.id }}"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1
+                  class="modal-title fs-5"
+                  id="exampleModalLabel"
+                  class="head1"
+                >
+                  Delete this Roadmap?
+                </h1>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <p class="delete-question">
+                  Are you sure you want to delete this Saved Roadmap? This will
+                  cause your progress to be lost in that roadmap.
+                </p>
+                <p>Roadmap # - {{ roadmap.id }}</p>
+                <p>Name - {{ roadmap.prompt }}</p>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Close
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  id="del-{{ roadmap.id }}"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="modal-body">
-          <p class="delete-question">Are you sure you want to delete this Saved Roadmap? This will cause your progress to be lost in that roadmap.</p>
-          <p>Roadmap # - {{ roadmap.id }}</p>
-          <p>Name - {{ roadmap.prompt }}</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-danger" id="del-{{ roadmap.id }}">Delete</button>
-        </div>
-      </div>
-    </div>
-  </div>
         {% endfor %}
-    </ul>
-  </main>
+      </ul>
+    </main>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const productButton = document.getElementById('product-button');
-      const productMenu = document.getElementById('product-menu');
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const productButton = document.getElementById("product-button");
+        const productMenu = document.getElementById("product-menu");
 
-      productButton.addEventListener('click', () => {
-        // Toggle the menu
-        if (productMenu.classList.contains('hidden')) {
-          productMenu.classList.remove('hidden');
-        } else {
-          productMenu.classList.add('hidden');
-        }
+        productButton.addEventListener("click", () => {
+          // Toggle the menu
+          if (productMenu.classList.contains("hidden")) {
+            productMenu.classList.remove("hidden");
+          } else {
+            productMenu.classList.add("hidden");
+          }
+        });
+
+        // Close the menu when clicking outside of it
+        document.addEventListener("click", (event) => {
+          if (
+            !productMenu.contains(event.target) &&
+            !productButton.contains(event.target)
+          ) {
+            productMenu.classList.add("hidden");
+          }
+        });
       });
+    </script>
 
-      // Close the menu when clicking outside of it
-      document.addEventListener('click', (event) => {
-        if (!productMenu.contains(event.target) && !productButton.contains(event.target)) {
-          productMenu.classList.add('hidden');
+    <script>
+      const form = document.getElementById("prompt-form");
+      const responseEl = document.getElementById("response");
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault(); // Prevent default form submission
+
+        const prompt = document.getElementById("prompt").value;
+
+        if (!prompt) {
+          alert("Please enter a prompt!");
+          return;
         }
+
+        const requestData = {
+          prompt: prompt,
+          // Add any other required fields here
+        };
+
+        fetch("http://127.0.0.1:8000/process_prompt/", {
+          // Replace with your API endpoint URL
+          method: "POST",
+          body: JSON.stringify(requestData),
+          headers: { "Content-Type": "application/json" },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            responseEl.textContent = JSON.stringify(data, null, 2); // Pretty-print JSON
+
+            // Prepare data for save_prompt API
+            const saveData = {
+              prompt: prompt,
+              response: JSON.stringify(data), // Convert response object to a string
+            };
+
+            // Send the data to the save_prompt API
+            fetch("http://127.0.0.1:8000/save_prompt/", {
+              // Replace with your save_prompt endpoint URL
+              method: "POST",
+              body: JSON.stringify(saveData),
+              headers: { "Content-Type": "application/json" },
+            })
+              .then((saveResponse) => saveResponse.json())
+              .then((saveResult) => {
+                console.log("Save result:", saveResult);
+                // You can display a success message here based on the saveResult
+              })
+              .catch((saveError) => {
+                console.error("Error saving data:", saveError);
+                // You can display an error message here
+              });
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            responseEl.textContent = "Error processing prompt.";
+          });
       });
-    });
-  </script>
-  <script>
-    const form = document.getElementById('prompt-form');
-const responseEl = document.getElementById('response');
-
-form.addEventListener('submit', (event) => {
-  event.preventDefault(); // Prevent default form submission
-
-  const prompt = document.getElementById('prompt').value;
-
-  if (!prompt) {
-    alert('Please enter a prompt!');
-    return;
-  }
-
-  const requestData = {
-    prompt: prompt,
-    // Add any other required fields here
-  };
-
-  fetch("http://127.0.0.1:8000/process_prompt/", { // Replace with your API endpoint URL
-    method: "POST",
-    body: JSON.stringify(requestData),
-    headers: { "Content-Type": "application/json" },
-  })
-    .then(response => response.json())
-    .then(data => {
-      responseEl.textContent = JSON.stringify(data, null, 2); // Pretty-print JSON
-
-      // Prepare data for save_prompt API
+    </script>
+    <script>
       const saveData = {
         prompt: prompt,
-        response: JSON.stringify(data), // Convert response object to a string
+        response: responseEl.textContent,
       };
+      console.log(saveData);
+    </script>
+    <script>
+      const prevRoadmapLinks = document.querySelectorAll(".prev-roadmap-link");
 
-      // Send the data to the save_prompt API
-      fetch("http://127.0.0.1:8000/save_prompt/", { // Replace with your save_prompt endpoint URL
-        method: "POST",
-        body: JSON.stringify(saveData),
-        headers: { "Content-Type": "application/json" },
-      })
-        .then(saveResponse => saveResponse.json())
-        .then(saveResult => {
-          console.log("Save result:", saveResult);
-          // You can display a success message here based on the saveResult
-        })
-        .catch(saveError => {
-          console.error("Error saving data:", saveError);
-          // You can display an error message here
+      prevRoadmapLinks.forEach((link) => {
+        link.addEventListener("click", (event) => {
+          event.preventDefault(); // Prevent default link action
+
+          // Get the ID from the data-id attribute (assuming the link has it)
+          const id = link.dataset.id;
+
+          // Construct the URL using the ID
+          const url = `http://127.0.0.1:8000/get_roadmap/${id}/`;
+
+          fetch(url)
+            .then((response) => response.json())
+            .then((data) => {
+              responseEl.textContent = ""; // Clear existing content
+              responseEl.textContent = JSON.stringify(data.response, null, 2); // Display fetched data
+            })
+            .catch((error) => {
+              console.error("Error fetching roadmap:", error);
+              responseEl.textContent = "Error fetching roadmap.";
+            });
         });
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      responseEl.textContent = 'Error processing prompt.';
-    });
-});
-  </script>
-  <script>
-    const saveData={
-        prompt:prompt,
-        response:responseEl.textContent
-    }
-    console.log(saveData)
-  </script>
-  <script>
-    const prevRoadmapLinks = document.querySelectorAll('.prev-roadmap-link');
-
-prevRoadmapLinks.forEach(link => {
-  link.addEventListener('click', (event) => {
-    event.preventDefault(); // Prevent default link action
-
-    // Get the ID from the data-id attribute (assuming the link has it)
-    const id = link.dataset.id;
-
-    // Construct the URL using the ID
-    const url = `http://127.0.0.1:8000/get_roadmap/${id}/`;
-
-    fetch(url)
-      .then(response => response.json())
-      .then(data => {
-        responseEl.textContent = ''; // Clear existing content
-        responseEl.textContent = JSON.stringify(data.response, null, 2); // Display fetched data
-      })
-      .catch(error => {
-        console.error('Error fetching roadmap:', error);
-        responseEl.textContent = 'Error fetching roadmap.';
       });
-  });
-});
-  </script>
-  <script>
-    const deleteButtons = document.querySelectorAll('.modal-footer .btn-danger');
+    </script>
 
-deleteButtons.forEach(deleteButton => {
-  deleteButton.addEventListener('click', (event) => {
-    // Get the roadmap ID directly from the button's ID:
-    const roadmapId = deleteButton.id.split('-')[1];
+    <script>
+      const deleteButtons = document.querySelectorAll(
+        ".modal-footer .btn-danger"
+      );
 
-    // Construct the URL using the extracted roadmap ID
-    const url = `http://127.0.0.1:8000/get_roadmap/${roadmapId}/`;
+      deleteButtons.forEach((deleteButton) => {
+        deleteButton.addEventListener("click", (event) => {
+          // Get the roadmap ID directly from the button's ID:
+          const roadmapId = deleteButton.id.split("-")[1];
+          // Construct the URL using the extracted roadmap ID
+          const url = `http://127.0.0.1:8000/get_roadmap/${roadmapId}/`;
 
-    fetch(url, {
-      method: 'DELETE',
-    })
-      .then(response => {
-        if (response.status === 204) {
-          // Successful deletion:
-          const modal = deleteButton.closest('.modal');
-          const modalEvent = new Event('hidden.bs.modal');
-          modal.dispatchEvent(modalEvent); // Trigger Bootstrap's modal hide event
+          fetch(url, {
+            method: "DELETE",
+          })
+            .then((response) => {
+              if (response.status === 204) {
+                // Successful deletion:
+                const modal = deleteButton.closest(".modal");
+                const modalEvent = new Event("hidden.bs.modal");
+                modal.dispatchEvent(modalEvent); // Trigger Bootstrap's modal hide event
 
-          // Consider user experience before reloading:
-          const confirmReload = confirm('Roadmap deleted successfully. Reload the page to see the updated list?');
+                // Consider user experience before reloading:
+                const confirmReload = confirm(
+                  "Roadmap deleted successfully. Reload the page to see the updated list?"
+                );
 
-          if (confirmReload) {
-            // User confirms reload, proceed:
-            window.location.reload();
-          } else {
-            // User cancels reload, display success message (optional):
-            alert('Roadmap deleted successfully.');
-          }
-        } else {
-          alert('Error deleting roadmap. Please try again.');
-        }
-      })
-      .catch(error => {
-        console.error('Error deleting roadmap:', error);
-        alert('An error occurred. Please try again.');
+                if (confirmReload) {
+                  // User confirms reload, proceed:
+                  window.location.reload();
+                } else {
+                  // User cancels reload, display success message (optional):
+                  alert("Roadmap deleted successfully.");
+                }
+              } else {
+                alert("Error deleting roadmap. Please try again.");
+              }
+            })
+            .catch((error) => {
+              console.error("Error deleting roadmap:", error);
+              alert("An error occurred. Please try again.");
+            });
+        });
       });
-  });
-});
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
-</body>
+    </script>
 
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+      integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+      crossorigin="anonymous"
+    ></script>
+  </body>
 </html>
