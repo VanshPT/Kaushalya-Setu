@@ -89,3 +89,9 @@ class GetRoadmapView(APIView):
 
 def gen_nodes(request):
     return render(request,'prototype/gen_nodes.html')
+
+def main_roadmap(request):
+    return render(request,'prototype/main_roadmap.html')
+
+def test_roadmap(request):
+    return render(request,'prototype/test_roadmap.html')

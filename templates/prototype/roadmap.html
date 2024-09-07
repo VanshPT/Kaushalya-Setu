@@ -232,7 +232,20 @@
         })
           .then((response) => response.json())
           .then((data) => {
-            responseEl.textContent = JSON.stringify(data, null, 2); // Pretty-print JSON
+            // Clear previous content
+            responseEl.innerHTML = "";
+            //responseEl.textContent = JSON.stringify(data, null, 2); // Pretty-print JSON
+            // Create a preformatted text block with styled JSON output
+            const formattedResponse = document.createElement("pre");
+            formattedResponse.style.backgroundColor = '#f4f4f4';
+            formattedResponse.style.padding = '15px';
+            formattedResponse.style.borderRadius = '5px';
+            formattedResponse.style.overflowX = 'auto';
+            formattedResponse.style.whiteSpace = 'pre-wrap';
+            formattedResponse.style.fontFamily = 'monospace';
+            formattedResponse.textContent = JSON.stringify(data, null, 2);
+
+            responseEl.appendChild(formattedResponse);
 
             // Prepare data for save_prompt API
             const saveData = {
@@ -263,6 +276,7 @@
           });
       });
     </script>
+
     <script>
       const saveData = {
         prompt: prompt,
@@ -270,6 +284,8 @@
       };
       console.log(saveData);
     </script>
+
+// Script to handle previous roadmaps
     <script>
       const prevRoadmapLinks = document.querySelectorAll(".prev-roadmap-link");
 
@@ -287,7 +303,17 @@
             .then((response) => response.json())
             .then((data) => {
               responseEl.textContent = ""; // Clear existing content
-              responseEl.textContent = JSON.stringify(data.response, null, 2); // Display fetched data
+              //responseEl.textContent = JSON.stringify(data.response, null, 2); // Display fetched data
+              const formattedResponse = document.createElement("pre");
+              formattedResponse.style.backgroundColor = '#f4f4f4';
+              formattedResponse.style.padding = '15px';
+              formattedResponse.style.borderRadius = '5px';
+              formattedResponse.style.overflowX = 'auto';
+              formattedResponse.style.whiteSpace = 'pre-wrap';
+              formattedResponse.style.fontFamily = 'monospace';
+              formattedResponse.textContent = JSON.stringify(data, null, 2);
+
+              responseEl.appendChild(formattedResponse);
             })
             .catch((error) => {
               console.error("Error fetching roadmap:", error);
@@ -297,6 +323,7 @@
       });
     </script>
 
+// Script to handle deletion of roadmaps
     <script>
       const deleteButtons = document.querySelectorAll(
         ".modal-footer .btn-danger"

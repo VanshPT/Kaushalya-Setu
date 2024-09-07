@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roadmap</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Additional custom styling can be added here if needed */
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+    <!-- Container for the roadmap -->
+    <div class="max-w-5xl mx-auto p-8">
+        <!-- Title, Description, and Total Time -->
+        <div id="roadmap-header" class="mb-8">
+            <h1 class="text-4xl font-bold mb-2" id="roadmap-title"></h1>
+            <p class="text-lg mb-4" id="roadmap-description"></p>
+            <p class="text-sm font-semibold text-gray-600" id="roadmap-total-time"></p>
+        </div>
+
+        <!-- Tree structure for the roadmap phases -->
+        <div id="roadmap-tree" class="space-y-4">
+            <!-- Dynamically generated roadmap tree goes here -->
+        </div>
+    </div>
+
+    <!-- Modal for displaying skill details -->
+    <div id="skill-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center">
+        <div class="bg-white p-8 rounded-lg max-w-lg w-full shadow-xl">
+            <h2 class="text-2xl font-bold mb-4" id="skill-modal-title"></h2>
+            <ul id="skill-modal-content" class="list-disc list-inside text-gray-700"></ul>
+            <button id="close-modal" class="mt-6 bg-red-500 text-white px-4 py-2 rounded">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Sample input JSON (this will be dynamic)
+        const inputJson = {
+            "title": "React Developer Roadmap",
+            "description": "This roadmap outlines the skills and technologies necessary to become a proficient React developer, covering everything from the basics to advanced concepts and popular libraries within the React ecosystem.",
+            "totalTime": "6-12+ Months",
+            "roadmap": [
+                {
+                    "name": "Frontend Fundamentals (2-3 Months)",
+                    "skills": [
+                        {
+                            "name": "HTML, CSS, and JavaScript",
+                            "description": "Master the core languages of the web.",
+                            "time": "1-2 Months"
+                        },
+                        {
+                            "name": "DOM Manipulation",
+                            "description": "Learn how to interact with the DOM.",
+                            "time": "2 Weeks"
+                        }
+                    ]
+                },
+                {
+                    "name": "JavaScript Fundamentals (2-3 Months)",
+                    "skills": [
+                        {
+                            "name": "Modern JavaScript (ES6+)",
+                            "description": "Get comfortable with modern JS features.",
+                            "time": "3-4 Weeks"
+                        },
+                        {
+                            "name": "Asynchronous JavaScript",
+                            "description": "Master Promises and async/await.",
+                            "time": "2-3 Weeks"
+                        }
+                    ]
+                }
+            ]
+        };
+
+        // Function to render the roadmap on the webpage
+        function renderRoadmap(data) {
+            // Fill the title, description, and total time
+            document.getElementById('roadmap-title').textContent = data.title;
+            document.getElementById('roadmap-description').textContent = data.description;
+            document.getElementById('roadmap-total-time').textContent = `Total Time: ${data.totalTime}`;
+
+            const roadmapTree = document.getElementById('roadmap-tree');
+            roadmapTree.innerHTML = '';
+
+            // Generate tree structure
+            data.roadmap.forEach((phase, index) => {
+                const phaseNode = document.createElement('div');
+                phaseNode.classList.add('border-l-4', 'pl-4', 'cursor-pointer', 'bg-white', 'p-4', 'rounded-md', 'shadow-md');
+                
+                phaseNode.innerHTML = `<h3 class="text-xl font-semibold">${phase.name}</h3>`;
+
+                // Add click event to open modal with skills
+                phaseNode.addEventListener('click', () => openModal(phase.name, phase.skills));
+                roadmapTree.appendChild(phaseNode);
+            });
+        }
+
+        // Function to open modal with skill details
+        function openModal(phaseName, skills) {
+            const modal = document.getElementById('skill-modal');
+            const skillModalTitle = document.getElementById('skill-modal-title');
+            const skillModalContent = document.getElementById('skill-modal-content');
+
+            skillModalTitle.textContent = phaseName;
+            skillModalContent.innerHTML = '';
+
+            // Display skill details
+            skills.forEach(skill => {
+                const skillItem = document.createElement('li');
+                skillItem.innerHTML = `<strong>${skill.name}</strong>: ${skill.description} <span class="text-gray-500">(${skill.time})</span>`;
+                skillModalContent.appendChild(skillItem);
+            });
+
+            // Show modal
+            modal.classList.remove('hidden');
+        }
+
+        // Close modal
+        document.getElementById('close-modal').addEventListener('click', () => {
+            document.getElementById('skill-modal').classList.add('hidden');
+        });
+
+        // Render roadmap on page load
+        renderRoadmap(inputJson);
+    </script>
+</body>
+</html>

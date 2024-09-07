@@ -8,4 +8,8 @@ urlpatterns = [
     path('get_roadmap/<int:pk>/', views.GetRoadmapView.as_view(), name='get_roadmap'),
     
     path('gen_nodes/', views.gen_nodes, name='gen_nodes'),
+
+    path('main_roadmap/', views.main_roadmap, name='main_roadmap'),
+
+    path('test_roadmap/', views.test_roadmap, name='test_roadmap'),
 ]
