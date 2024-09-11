@@ -11,7 +11,7 @@
   </head>
   <body class="bg-gray-100 min-h-screen">
     <!-- Navbar -->
-    <nav class="bg-white shadow-md">
+    {% comment %} <nav class="bg-white shadow-md">
       <div class="container mx-auto px-4">
         <div class="flex justify-between items-center py-4">
           <div class="flex items-center">
@@ -49,9 +49,12 @@
           </div>
         </div>
       </div>
-    </nav>
+    </nav> {% endcomment %}
 
     <!-- Roadmap Content -->
+    <main>
+      <pre id="response"></pre>
+    </main>
     <div class="container mx-auto p-6">
       <h1 id="title" class="text-3xl font-bold mb-4"></h1>
       <p id="description" class="text-gray-600 mb-6"></p>
@@ -382,5 +385,6 @@
         generateRoadmap(roadmapData);
       });
     </script>
+    {% comment %} <script>grab mal of #include tag and innject that json into hardcoded json on this </script> {% endcomment %}
   </body>
 </html>
