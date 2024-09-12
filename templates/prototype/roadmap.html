@@ -20,6 +20,9 @@
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Fascinate&display=swap" rel="stylesheet">
     <style>
       /* Additional custom styles */
       .hidden {
@@ -62,25 +65,13 @@
         margin-top: 1rem;
         font-family: monospace; /* Display response in mono-spaced font */
       }
-      .prev-roadmap-section {
-        margin-left: 2rem;
-        margin-top: 2rem;
-      }
-      .link-col {
-        color: blue;
-      }
-      .icon-modify {
-        margin-left: 0.5rem;
-      }
-      .delete-question {
-        font-weight: bold;
-        font-size: 1rem;
-      }
+      
+    
     </style>
   </head>
 
   <body>
-    <header class="bg-yellow-300">{% include 'prototype/navbar.html' %}</header>
+    <header class="custom-color-1">{% include 'prototype/navbar.html' %}</header>
 
     <main>
       <div class="custom-flex">
@@ -93,89 +84,13 @@
             <label for="prompt">Enter your prompt:</label>
             <textarea id="prompt" name="prompt" rows="3" cols="100"></textarea>
             <button type="submit" id="submit-button">Process Prompt</button>
+            
           </form>
         </div>
       </div>
     </main>
 {% include 'prototype/main_roadmap.html' %}
-    // Display the response from the API
-    
-
-    <main class="prev-roadmap-section">
-      <h2 class="head1">Previously Explored Roadmaps</h2>
-      <ul>
-        {% for roadmap in prev_roadmaps %}
-        <li>
-          <a
-            href="#"
-            class="link-col prev-roadmap-link"
-            data-id="{{ roadmap.id }}"
-            ><span>{{ roadmap.id }}</span> - {{ roadmap.prompt }}</a
-          ><span class="icon-modify"
-            ><button
-              type="button"
-              class="btn"
-              data-bs-toggle="modal"
-              data-bs-target="#exampleModal-{{ roadmap.id }}"
-            >
-              <i class="fa-solid fa-trash"></i></button
-          ></span>
-        </li>
-        <!-- Modal -->
-        <div
-          class="modal fade"
-          id="exampleModal-{{ roadmap.id }}"
-          tabindex="-1"
-          aria-labelledby="exampleModalLabel"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1
-                  class="modal-title fs-5"
-                  id="exampleModalLabel"
-                  class="head1"
-                >
-                  Delete this Roadmap?
-                </h1>
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div class="modal-body">
-                <p class="delete-question">
-                  Are you sure you want to delete this Saved Roadmap? This will
-                  cause your progress to be lost in that roadmap.
-                </p>
-                <p>Roadmap # - {{ roadmap.id }}</p>
-                <p>Name - {{ roadmap.prompt }}</p>
-              </div>
-              <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  data-bs-dismiss="modal"
-                >
-                  Close
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-danger"
-                  id="del-{{ roadmap.id }}"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-        {% endfor %}
-      </ul>
-    </main>
+{% include 'prototype/previous-roadmap-element.html' %}
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
@@ -283,7 +198,6 @@
       console.log(saveData);
     </script>
 
-// Script to handle previous roadmaps
     <script>
       const prevRoadmapLinks = document.querySelectorAll(".prev-roadmap-link");
 
@@ -321,7 +235,6 @@
       });
     </script>
 
-// Script to handle deletion of roadmaps
     <script>
       const deleteButtons = document.querySelectorAll(
         ".modal-footer .btn-danger"
