@@ -23,68 +23,87 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Fascinate&display=swap" rel="stylesheet">
-    <style>
-      /* Additional custom styles */
-      .hidden {
-        display: none;
-      }
+<style>
+  /* Additional custom styles */
+  .hidden {
+    display: none;
+  }
 
-      #user-logo {
-        background-color: white;
-        padding: 7px;
-        border-radius: 80px;
-      }
+  #user-logo {
+    background-color: white;
+    padding: 7px;
+    border-radius: 80px;
+  }
 
-      .custom-flex {
-        flex-direction: column;
-        justify-content: center !important;
-        align-items: center;
-        margin-left: 2rem;
-      }
+  .custom-flex {
+    flex-direction: column;
+    justify-content: center !important;
+    align-items: center;
+    margin: 0; /* Removed spacing */
+  }
 
-      .head1 {
-        font-size: 1.5rem;
-      }
+  .head1 {
+    font-size: 1.5rem;
+    color: white; /* Text color */
+  }
 
-      #prompt {
-        border: 2px solid grey;
-        border-radius: 5px;
-      }
+  #prompt {
+    border: 2px solid #3a3a3a; /* Dark gray border for contrast */
+    border-radius: 5px;
+    background-color: #2d2d2d; /* Slightly lighter background */
+    color: white;
+    padding: 8px;
+    font-family: monospace; /* Display response in mono-spaced font */
+  }
 
-      #submit-button {
-        background-color: blue;
-        padding: 10px;
-        border-radius: 5px;
-        color: white;
-      }
+  #submit-button {
+    background: linear-gradient(to right, #202938 0%, #202938 100%); /* Gradient background */
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
 
-      #response {
-        border: 1px solid lightgrey;
-        padding: 10px;
-        border-radius: 5px;
-        margin-top: 1rem;
-        font-family: monospace; /* Display response in mono-spaced font */
-      }
-      
-    
-    </style>
+  #submit-button:hover {
+    background: linear-gradient(to right, #1e3a8a 0%, #1e3a8a 100%); /* Lighter gradient on hover */
+  }
+
+  #response {
+    border: 1px solid #3a3a3a; /* Dark gray border for contrast */
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 1rem;
+    background-color: white
+    color: white;
+    font-family: monospace; /* Display response in mono-spaced font */
+  }
+
+  .form-class {
+    background-color: #1a1a1a; /* Match navbar background */
+    padding: 2rem;
+    border-top: 1px solid grey;
+    border-bottom-left-radius: 8px; /* Rounded lower left corner */
+    border-bottom-right-radius: 8px; /* Rounded lower right corner */
+  }
+</style>
   </head>
 
   <body>
     <header class="custom-color-1">{% include 'prototype/navbar.html' %}</header>
 
     <main>
-      <div class="custom-flex">
-        <h1 class="head1 font-bold font-awesome animate-slide-in">
+      <div class="custom-flex form-class">
+        <h1 class="head1 font-bold animate-slide-in">
           Generate Roadmap
         </h1>
         <div class="mt-6 flex max-w-md gap-x-4">
-          <form id="prompt-form">
+          <form id="prompt-form" class="flex flex-col gap-y-4">
             {% csrf_token %}
-            <label for="prompt">Enter your prompt:</label>
+            <label for="prompt" class="text-white">Enter your prompt:</label>
             <textarea id="prompt" name="prompt" rows="3" cols="100"></textarea>
             <button type="submit" id="submit-button">Process Prompt</button>
-            
           </form>
         </div>
       </div>
