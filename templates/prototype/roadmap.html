@@ -111,8 +111,8 @@
         </div>
       </div>
     </main>
-    {% include 'prototype/main_roadmap.html' %} {% include
-    'prototype/previous-roadmap-element.html' %}
+    {% include 'prototype/main_roadmap.html' %} 
+    {% include 'prototype/previous-roadmap-element.html' %}
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
@@ -143,34 +143,37 @@
     <script>
       const form = document.getElementById("prompt-form");
       const responseEl = document.getElementById("response");
-
+    
       form.addEventListener("submit", (event) => {
         event.preventDefault(); // Prevent default form submission
-
+    
         const prompt = document.getElementById("prompt").value;
-
+    
         if (!prompt) {
           alert("Please enter a prompt!");
           return;
         }
-
+    
         const requestData = {
           prompt: prompt,
           // Add any other required fields here
         };
-
+    
         fetch("http://127.0.0.1:8000/process_prompt/", {
-          // Replace with your API endpoint URL
           method: "POST",
           body: JSON.stringify(requestData),
           headers: { "Content-Type": "application/json" },
         })
           .then((response) => response.json())
           .then((data) => {
-            // Clear previous content
+            // Parse the response coming from API
+            const parsedResponse = JSON.parse(data.response);
+    
+            // Call the function to generate roadmap with the dynamic data
+            generateRoadmap(parsedResponse);
+    
+            // Optional: display raw response in a styled preformatted block
             responseEl.innerHTML = "";
-            //responseEl.textContent = JSON.stringify(data, null, 2); // Pretty-print JSON
-            // Create a preformatted text block with styled JSON output
             const formattedResponse = document.createElement("pre");
             formattedResponse.style.backgroundColor = "#f4f4f4";
             formattedResponse.style.padding = "15px";
@@ -178,19 +181,17 @@
             formattedResponse.style.overflowX = "auto";
             formattedResponse.style.whiteSpace = "pre-wrap";
             formattedResponse.style.fontFamily = "monospace";
-            formattedResponse.textContent = JSON.stringify(data, null, 2);
-
+            formattedResponse.textContent = JSON.stringify(parsedResponse, null, 2);
+    
             responseEl.appendChild(formattedResponse);
-
-            // Prepare data for save_prompt API
+    
+            // Save prompt and response as needed
             const saveData = {
               prompt: prompt,
-              response: JSON.stringify(data), // Convert response object to a string
+              response: JSON.stringify(parsedResponse),
             };
-
-            // Send the data to the save_prompt API
+    
             fetch("http://127.0.0.1:8000/save_prompt/", {
-              // Replace with your save_prompt endpoint URL
               method: "POST",
               body: JSON.stringify(saveData),
               headers: { "Content-Type": "application/json" },
@@ -198,11 +199,9 @@
               .then((saveResponse) => saveResponse.json())
               .then((saveResult) => {
                 console.log("Save result:", saveResult);
-                // You can display a success message here based on the saveResult
               })
               .catch((saveError) => {
                 console.error("Error saving data:", saveError);
-                // You can display an error message here
               });
           })
           .catch((error) => {
@@ -211,6 +210,7 @@
           });
       });
     </script>
+    
 
     <script>
       const saveData = {
