@@ -236,6 +236,8 @@
           fetch(url)
             .then((response) => response.json())
             .then((data) => {
+              const parsedResponse = data;
+              generateRoadmap(parsedResponse);
               responseEl.textContent = ""; // Clear existing content
               //responseEl.textContent = JSON.stringify(data.response, null, 2); // Display fetched data
               const formattedResponse = document.createElement("pre");

@@ -7,6 +7,7 @@ import google.generativeai as genai
 import os
 from .models import PrevRoadmap
 from django.conf import settings
+import json
 # Create your views here.
 def roadmap(request):
     prev_roadmaps=PrevRoadmap.objects.all()
@@ -70,10 +71,19 @@ class GetRoadmapView(APIView):
     def get(self, request, pk):
         try:
             roadmap = PrevRoadmap.objects.get(pk=pk)
-            serializer = serializers.RoadmapSerializer(roadmap)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            # Extract the 'response' field from the object and convert it to a proper JSON
+            raw_response = roadmap.response  # This is a string in JSON format
+            
+            # Assuming the 'response' field contains JSON data inside as a string
+            response_json = json.loads(raw_response)  # Convert the string into a dictionary
+
+            # Return the filtered 'response' part, which is a valid JSON
+            return Response(response_json, status=status.HTTP_200_OK)
+            
         except PrevRoadmap.DoesNotExist:
             return Response({'error': 'Roadmap not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': f'An error occurred: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def delete(self, request, pk):
         try:
@@ -83,7 +93,6 @@ class GetRoadmapView(APIView):
         except PrevRoadmap.DoesNotExist:
             return Response({'error': 'Roadmap not found'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            # Handle other potential exceptions (e.g., database errors)
             return Response({'error': f'An error occurred: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 def main_roadmap(request):
