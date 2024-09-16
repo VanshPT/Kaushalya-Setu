@@ -26,18 +26,9 @@
       href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Fascinate&display=swap"
       rel="stylesheet"
     />
-    <style>
+   <!--  <style>
       /* Additional custom styles */
-      .hidden {
-        display: none;
-      }
-
-      #user-logo {
-        background-color: white;
-        padding: 7px;
-        border-radius: 80px;
-      }
-
+   
       .custom-flex {
         flex-direction: column;
         justify-content: center !important;
@@ -50,39 +41,6 @@
         color: white; /* Text color */
       }
 
-      #prompt {
-        border: 2px solid #3a3a3a; /* Dark gray border for contrast */
-        border-radius: 5px;
-        background-color: #2d2d2d; /* Slightly lighter background */
-        color: white;
-        padding: 8px;
-        font-family: monospace; /* Display response in mono-spaced font */
-      }
-
-      #submit-button {
-        background: linear-gradient(to right, #202938 0%, #202938 100%); /* Gradient background */
-        padding: 10px;
-        border-radius: 5px;
-        color: white;
-        border: none;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-      }
-
-      #submit-button:hover {
-        background: linear-gradient(to right, #1e3a8a 0%, #1e3a8a 100%); /* Lighter gradient on hover */
-      }
-
-      #response {
-        border: 1px solid #3a3a3a; /* Dark gray border for contrast */
-        padding: 10px;
-        border-radius: 5px;
-        margin-top: 1rem;
-        background-color: white
-        color: white;
-        font-family: monospace; /* Display response in mono-spaced font */
-      }
-
       .form-class {
         background-color: #1a1a1a; /* Match navbar background */
         padding: 2rem;
@@ -90,7 +48,13 @@
         border-bottom-left-radius: 8px; /* Rounded lower left corner */
         border-bottom-right-radius: 8px; /* Rounded lower right corner */
       }
-    </style>
+
+      /* Style for expanding textarea */
+      textarea {
+        resize: none; /* Disable manual resizing */
+        overflow: hidden; /* Hide scroll until needed */
+      }
+    </style> -->
   </head>
 
   <body>
@@ -99,19 +63,75 @@
     </header>
 
     <main>
-      <div class="custom-flex form-class">
-        <h1 class="head1 font-bold animate-slide-in">Generate Roadmap</h1>
-        <div class="mt-6 flex max-w-md gap-x-4">
-          <form id="prompt-form" class="flex flex-col gap-y-4">
+      <div style="
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 4rem 4rem;
+        background-color: #1a1a1a;
+        padding: 2rem;
+        border-top: 1px solid grey;
+        border-bottom-left-radius: 22px;
+        border-bottom-right-radius: 22px;
+        border-top-left-radius: 22px;
+        border-top-right-radius: 22px;
+      ">
+        <h1 style="
+          font-size: 2rem;
+          color: white;
+          font-weight: semi-bold;
+        " class="animate-slide-in">Generate Roadmap</h1>
+        <div style="margin-top: 1.5rem; width: 100%; max-width: 28rem;">
+          <form id="prompt-form" style="display: flex; flex-direction: column; gap: 1rem;">
             {% csrf_token %}
-            <label for="prompt" class="text-white">Enter your prompt:</label>
-            <textarea id="prompt" name="prompt" rows="3" cols="100"></textarea>
-            <button type="submit" id="submit-button">Process Prompt</button>
+            <!-- <label for="prompt" style="color: white;">Enter your prompt:</label> -->
+            <textarea id="prompt" name="prompt" rows="1"
+              style="
+                width: 100%;
+                padding: 0.75rem;
+                border-radius: 2rem;
+                border: 1px solid #d1d5db; /* Light gray border */
+                background-color: white;
+                color: black;
+                resize: none; /* Disable manual resizing */
+                overflow: hidden; /* Hide scroll until needed */
+                font-family: monospace;
+                placeholder-color: #6b7280; /* Dimmed placeholder color */
+              "
+              placeholder="Enter your prompt..."></textarea>
+            <button type="submit" id="submit-button"
+              style="
+                background: linear-gradient(to right, #202938 0%, #202938 100%);
+                color: white;
+                padding: 0.5rem 1rem;
+                border-radius: 0.5rem;
+                border: none;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+                margin: auto;
+                display: block;
+              "
+              onmouseover="this.style.background = 'linear-gradient(to right, #1e3a8a 0%, #1e3a8a 100%)'"
+              onmouseout="this.style.background = 'linear-gradient(to right, #202938 0%, #202938 100%)'">
+              Process Prompt
+            </button>
           </form>
         </div>
       </div>
     </main>
-    {% include 'prototype/main_roadmap.html' %} 
+
+    <script>
+      const textarea = document.querySelector('#prompt');
+
+      // Dynamically adjust textarea height as user types
+      textarea.addEventListener('input', (e) => {
+        e.target.style.height = 'auto'; // Reset the height
+        e.target.style.height = e.target.scrollHeight + 'px'; // Set height based on content
+      });
+    </script>
+
+    {% include 'prototype/main_roadmap.html' %}
     {% include 'prototype/previous-roadmap-element.html' %}
 
     <script>
@@ -160,13 +180,15 @@
         };
     
         fetch("http://127.0.0.1:8000/process_prompt/", {
+          // Replace with your API endpoint URL
           method: "POST",
           body: JSON.stringify(requestData),
           headers: { "Content-Type": "application/json" },
         })
           .then((response) => response.json())
           .then((data) => {
-            // Parse the response coming from API
+
+            // Parse the response coming from the API
             const parsedResponse = JSON.parse(data.response);
     
             // Call the function to generate roadmap with the dynamic data
@@ -188,10 +210,12 @@
             // Save prompt and response as needed
             const saveData = {
               prompt: prompt,
-              response: JSON.stringify(parsedResponse),
+              response: JSON.stringify(parsedResponse), //Convert response object to a string
             };
-    
+            
+            // Send the data to the save_prompt API
             fetch("http://127.0.0.1:8000/save_prompt/", {
+              // Replace with your save_prompt endpoint URL
               method: "POST",
               body: JSON.stringify(saveData),
               headers: { "Content-Type": "application/json" },
@@ -199,6 +223,7 @@
               .then((saveResponse) => saveResponse.json())
               .then((saveResult) => {
                 console.log("Save result:", saveResult);
+                // You can display a success message here based on the saveResult
               })
               .catch((saveError) => {
                 console.error("Error saving data:", saveError);
