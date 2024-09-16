@@ -142,6 +142,41 @@
       .modal-close:hover {
         color: #00c6ff;
       }
+      .modal-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+      }
+      
+      .evaluate-btn, .explore-btn {
+        display: inline-block;
+        padding: 8px 16px;
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 5px;
+        text-align: center;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+      }
+      
+      .evaluate-btn {
+        background-color: #4CAF50; /* Matching theme color */
+        color: white;
+      }
+      
+      .explore-btn {
+        background-color: #008CBA; /* Matching theme color */
+        color: white;
+      }
+      
+      .evaluate-btn:hover {
+        background-color: #45a049;
+      }
+      
+      .explore-btn:hover {
+        background-color: #007bb5;
+      }
+      
     </style>
   </head>
   <body class="bg-gray-100 min-h-screen">
@@ -235,7 +270,14 @@
       // Function to open modal with specific skill data
       function openModal(skill) {
         document.getElementById("modalTitle").textContent = skill.name;
-        const skillContent = `<p><strong>Description:</strong> ${skill.description} <br> <strong>Time:</strong> ${skill.time}</p>`;
+        const skillContent = `
+    <p><strong>Description:</strong> ${skill.description} <br> 
+    <strong>Time:</strong> ${skill.time}</p>
+    <hr>
+    <div class="modal-buttons">
+      <a href="test/${skill.name}/" class="evaluate-btn">Evaluate this skill</a>
+      <a href="courses_recommended/${skill.name}/" class="explore-btn">Explore courses</a>
+    </div>`;
         document.getElementById("modalContent").innerHTML = skillContent;
         document.getElementById("learnMoreModal").classList.remove("hidden");
       }
