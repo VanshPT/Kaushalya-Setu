@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-uk#pfeq%v6$_iq1id^n5-t0=2%%zu)v7nnya*trsf$%ui28b*p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -151,7 +151,7 @@ REST_FRAMEWORK = {
     ],
     # Other configuration options...
 }
-API_KEY="AIzaSyDlX5LfqNdiROBZd4YmNSrznocJbxfY6Ms"
+API_KEY="your-api-key-here"
 GENERATION_CONFIG = {
   "temperature": 1.25,
   "top_p": 0.95,
